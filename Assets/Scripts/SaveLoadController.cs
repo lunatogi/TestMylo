@@ -19,6 +19,7 @@ public class SaveLoadController : MonoBehaviour
     private Player player1;
     [SerializeField]
     private Player player2;
+    private ResourceController resController;
     private IDataDriver DataDriver = new JsonDataDriver();
     public bool encryption;
     private bool playerChanged;
@@ -28,10 +29,12 @@ public class SaveLoadController : MonoBehaviour
 
     private void Start()
     {
+        resController = GetComponent<ResourceController>();
         SetDefaultPlayers();
         LoadJson();
         playerChanged = false;
         encryption = false;
+        
         //CalculateTimeInterval();
     }
 
@@ -45,16 +48,35 @@ public class SaveLoadController : MonoBehaviour
     }
 
     public void SaveJson(){
-        CalculateTimeInterval();
+        SavePlayerData();
+        SaveResourceData();
+    }
+
+    private void SavePlayerData(){
+        //CalculateTimeInterval();
         player.lastTime = DateTime.UtcNow.ToString();
         if(DataDriver.SaveData("/player-settings.json", player, encryption)){
             Debug.Log("Player successfully saved.");
         }else{
-            Debug.LogError("Unable to save file.");
+            Debug.LogError("Unable to save player.");
+        }
+    }
+
+    private void SaveResourceData(){
+        Resources res = resController.res.Clone();
+        if(DataDriver.SaveData("/resource-settings.json", res, encryption)){
+            Debug.Log("Source successfully saved.");
+        }else{
+            Debug.LogError("Unable to save resource.");
         }
     }
 
     public void LoadJson(){
+        LoadPlayerData();
+        LoadResourceData();
+    }
+
+    private void LoadPlayerData(){
         try{
             Player tmpPlayer = DataDriver.LoadData<Player>("/player-settings.json", encryption);
             player = new Player(tmpPlayer.name, tmpPlayer.money, tmpPlayer.crystal, tmpPlayer.level, new Dictionary<string, int>(tmpPlayer.inventory));
@@ -62,10 +84,25 @@ public class SaveLoadController : MonoBehaviour
             CalculateTimeInterval();
             Debug.Log("Player successfully loaded.");
         }catch(Exception e){
-            Debug.LogError($"Unable to load file, giving default values: {e.Message} {e.StackTrace}");
+            Debug.LogError($"Unable to load player, giving default values: {e.Message} {e.StackTrace}");
             player = player1.Clone();
         }
         UpdateInputField("Player stats:\r\n");
+    }
+
+    private void LoadResourceData(){
+        try{
+            Resources tmpResource = DataDriver.LoadData<Resources>("/resource-settings.json", encryption);
+            //player = new Player(tmpPlayer.name, tmpPlayer.money, tmpPlayer.crystal, tmpPlayer.level, new Dictionary<string, int>(tmpPlayer.inventory));
+            Debug.Log("Resources : "+tmpResource.currentQuantitiy);
+            resController.res = tmpResource.Clone();
+            resController.Setup();
+            //player.lastTime = tmpPlayer.lastTime;
+            //CalculateTimeInterval();
+            Debug.Log("Resources successfully loaded.");
+        }catch(Exception e){
+            Debug.LogError($"Unable to load resource, giving default values: {e.Message} {e.StackTrace}");
+        }
     }
 
     private void CalculateTimeInterval(){
