@@ -12,7 +12,7 @@ public class Player
     public int crystal;
     public int level;
     public Dictionary<string, int> inventory = new Dictionary<string, int>();
-    public long lastTick;
+    public string lastTime;
 
     //public Dictionary<>
 
@@ -32,7 +32,7 @@ public class Player
         this.crystal = _crystal;
         this.level = _level;
         this.inventory = _inventory;
-        this.lastTick = DateTime.UtcNow.Ticks;
+        this.lastTime = DateTime.UtcNow.ToString();
     }
 
     public Player Clone()

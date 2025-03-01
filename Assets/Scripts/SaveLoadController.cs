@@ -22,8 +22,8 @@ public class SaveLoadController : MonoBehaviour
     private IDataDriver DataDriver = new JsonDataDriver();
     public bool encryption;
     private bool playerChanged;
-    private long oldTick;
-    private long newTick;
+    private DateTime LastTime;
+    private DateTime CurrTime;
 
 
     private void Start()
@@ -32,7 +32,7 @@ public class SaveLoadController : MonoBehaviour
         LoadJson();
         playerChanged = false;
         encryption = false;
-        Debug.Log(DateTime.UtcNow.Ticks.ToString());
+        //CalculateTimeInterval();
     }
 
     public void ToggleEncryption(bool EncryptionEnabled)
@@ -45,8 +45,8 @@ public class SaveLoadController : MonoBehaviour
     }
 
     public void SaveJson(){
-        player.lastTick = DateTime.UtcNow.Ticks;
-        Debug.Log("Current ticks: "+ DateTime.UtcNow.Ticks);
+        CalculateTimeInterval();
+        player.lastTime = DateTime.UtcNow.ToString();
         if(DataDriver.SaveData("/player-settings.json", player, encryption)){
             Debug.Log("Player successfully saved.");
         }else{
@@ -58,13 +58,25 @@ public class SaveLoadController : MonoBehaviour
         try{
             Player tmpPlayer = DataDriver.LoadData<Player>("/player-settings.json", encryption);
             player = new Player(tmpPlayer.name, tmpPlayer.money, tmpPlayer.crystal, tmpPlayer.level, new Dictionary<string, int>(tmpPlayer.inventory));
-            player.lastTick = DateTime.UtcNow.Ticks;
+            player.lastTime = tmpPlayer.lastTime;
+            CalculateTimeInterval();
             Debug.Log("Player successfully loaded.");
         }catch(Exception e){
             Debug.LogError($"Unable to load file, giving default values: {e.Message} {e.StackTrace}");
-            player = player1;
+            player = player1.Clone();
         }
         UpdateInputField("Player stats:\r\n");
+    }
+
+    private void CalculateTimeInterval(){
+        
+        LastTime = DateTime.Parse(player.lastTime);
+        Debug.Log("raw last time"+player.lastTime.ToString());
+        CurrTime = DateTime.UtcNow;
+        Debug.Log("cur time"+DateTime.UtcNow.ToString());
+        Debug.Log("last time"+player.lastTime.ToString());
+        TimeSpan interval = CurrTime - LastTime;
+        Debug.Log("Interval in seconds:" + interval.TotalSeconds);
     }
 
     public void ToggleCharacter(){
@@ -96,7 +108,7 @@ public class SaveLoadController : MonoBehaviour
             {"Corn", 45},
             {"Truck", 1}
         });
-        player1.lastTick = DateTime.UtcNow.Ticks;
+        //player1.lastTime = DateTime.UtcNow.ToString();
 
         player2 = new Player("Lara Croft", 458, 16, 45, new Dictionary<string, int>(){
             {"Shovel", 1},
@@ -104,6 +116,6 @@ public class SaveLoadController : MonoBehaviour
             {"Pipe", 4},
             {"Fertilizer", 15}
         });
-        player2.lastTick = DateTime.UtcNow.Ticks;
+        //player2.lastTime = DateTime.UtcNow.ToString();
     }
 }
