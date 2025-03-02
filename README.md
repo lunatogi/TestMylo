@@ -1,7 +1,7 @@
 # 🎮 Oyun Kayıt Sistemi ve Kaynak Yönetimi
 
 ## 📌 Genel Bakış
-Oyuna ilk giriş yapıldığında, daha önceden kayıtlı bir karakter olup olmadığı kontrol edilir. Eğer kayıtlı bir karakter yoksa, oyun **default** değerlerle başlatılır. Oyun verileri **yerel olarak bir JSON dosyasında** tutulur ve bu işlemi yönetmek için **Newtonsoft.Json** paketi kullanılmıştır.
+Oyuna ilk giriş yapıldığında, daha önceden kayıtlı bir karakter olup olmadığı kontrol edilir. Eğer kayıtlı bir karakter yoksa, oyun **default** değerlerle başlatılır. Oyun verileri **yerel olarak bir JSON dosyasında** tutulur ve bu işlemi yönetmek için **Newtonsoft.Json** (https://www.newtonsoft.com/json) paketi kullanılmıştır.
 
 ## 💾 Kayıt Sistemi
 - **JSON dosyası şifrelenmeden** cihazda tutulur.
