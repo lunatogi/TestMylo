@@ -38,5 +38,5 @@ Oyuna ilk giriş yapıldığında, daha önceden kayıtlı bir karakter olup olm
 ## 📌 Sonuç
 Bu sistem, **basit ve güvenilir bir kayıt yöntemi** sunarken, **oyun kapanıp açılsa bile kaynak üretiminin devam etmesini sağlar**. JSON ile veri saklamak, hız ve güvenilirlik açısından **pratik bir çözüm** sunmaktadır.
 
-**Not:** Unity'nin tüm dosyaları katıldığında çok büyüdüğü ve GitHub'a atılması zorlaştığı için sadece Assets dosyasını pushladım. Asset dosyasının içindeki unity-package ile boş bir 2D Unity mobile oyun projesine import edilmesi en sağlıklı deneyimi sunacaktır.
+**Not:** Unity'nin tüm dosyaları katıldığında çok büyüdüğü ve GitHub'a atılması zorlaştığı için sadece Assets dosyasını pushladım. Asset dosyasının içindeki mylo-package.unitypackage dosyasının boş bir 2D Unity mobile oyun projesine import edilmesi en sağlıklı deneyimi sunacaktır.
 
