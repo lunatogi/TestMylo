@@ -135,7 +135,13 @@ public class SaveLoadController : MonoBehaviour
         if(File.Exists(path)){
             File.Delete(path);
         }
+        path = Application.persistentDataPath + "/resource-settings.json";
+        if(File.Exists(path)){
+            File.Delete(path);
+        }
         player = new Player("-", 100, 0, 1, new Dictionary<string, int>(){});
+        resController.res = new Resources();
+        resController.Setup();
         UpdateInputField("Player stats:\r\n");
     }
 
